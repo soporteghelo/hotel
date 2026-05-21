@@ -32,10 +32,10 @@ function BedSlot({ cama, onClick }) {
     <button
       onClick={() => onClick(cama)}
       className={`
-        ${colorClass} border rounded text-white text-xs font-bold
-        flex flex-col items-center justify-center p-1 w-full h-12
-        transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-white/50
-        cursor-pointer select-none
+        ${colorClass} border rounded-lg text-white text-xs font-bold
+        flex flex-col items-center justify-center p-1 w-full h-14 md:h-12
+        transition-all duration-150 focus:outline-none active:opacity-80
+        cursor-pointer select-none touch-manipulation
       `}
       title={`${cama.codigo} - ${BED_LABELS[cama.estado]}`}
     >
@@ -158,51 +158,49 @@ export default function MapView() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Controls */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <div className="flex flex-wrap gap-4 items-center">
-          <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">Pabellón</label>
-            <select
-              value={selectedHotel}
-              onChange={e => { setSelectedHotel(e.target.value); setSelectedPiso(1); }}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {hotels.map(h => (
-                <option key={h.id} value={h.id}>{h.nombre}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-500 block mb-1">Piso</label>
-            <div className="flex gap-2">
-              {pisos.map(p => (
-                <button
-                  key={p}
-                  onClick={() => setSelectedPiso(p)}
-                  className={`
-                    px-4 py-1.5 text-sm font-medium rounded-lg border transition-colors
-                    ${selectedPiso === p
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}
-                  `}
-                >
-                  Piso {p}
-                </button>
-              ))}
-            </div>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-3">
+        <div>
+          <label className="text-xs font-medium text-gray-500 block mb-1">Pabellón</label>
+          <select
+            value={selectedHotel}
+            onChange={e => { setSelectedHotel(e.target.value); setSelectedPiso(1); }}
+            className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {hotels.map(h => (
+              <option key={h.id} value={h.id}>{h.nombre}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-xs font-medium text-gray-500 block mb-1.5">Piso</label>
+          <div className="flex gap-2 flex-wrap">
+            {pisos.map(p => (
+              <button
+                key={p}
+                onClick={() => setSelectedPiso(p)}
+                className={`
+                  px-4 py-2 text-sm font-medium rounded-xl border transition-colors min-w-[64px]
+                  ${selectedPiso === p
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-gray-700 border-gray-300 active:bg-gray-50'}
+                `}
+              >
+                Piso {p}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Floor stats */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
-          { label: 'Libre', value: stats.libre, color: 'bg-green-500' },
-          { label: 'Ocupada', value: stats.ocupada, color: 'bg-red-500' },
-          { label: 'Reservada', value: stats.reservada, color: 'bg-yellow-400' },
-          { label: 'Mant./Limpieza', value: stats.mantenimiento, color: 'bg-gray-400' },
+          { label: 'Libres',          value: stats.libre,         color: 'bg-green-500' },
+          { label: 'Ocupadas',        value: stats.ocupada,       color: 'bg-red-500' },
+          { label: 'Reservadas',      value: stats.reservada,     color: 'bg-yellow-400' },
+          { label: 'Mant./Limpieza',  value: stats.mantenimiento, color: 'bg-gray-400' },
         ].map(s => (
           <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex items-center gap-3">
             <div className={`w-3 h-3 rounded-full ${s.color} flex-shrink-0`} />
@@ -222,7 +220,7 @@ export default function MapView() {
         {cuartosEnPiso.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-10">No hay cuartos en este piso</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-3">
             {cuartosEnPiso.map(cuarto => {
               const camasCuarto = camas.filter(c => c.idCuarto === cuarto.id);
               return (

@@ -102,10 +102,10 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Middle row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Occupancy per hotel */}
-        <div className="lg:col-span-2">
+      {/* Middle row — on mobile: quick actions first, then occupancy, then activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+        {/* Occupancy per hotel — order-2 on mobile, order-1 on desktop */}
+        <div className="lg:col-span-2 order-2 lg:order-1">
           <Card>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-gray-800">Ocupación por Pabellón</h3>
@@ -156,8 +156,8 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Quick actions */}
-        <Card>
+        {/* Quick actions — order-1 on mobile (first!), order-2 on desktop */}
+        <Card className="order-1 lg:order-2">
           <h3 className="font-semibold text-gray-800 mb-4">Acciones Rápidas</h3>
           <div className="space-y-3">
             <button
