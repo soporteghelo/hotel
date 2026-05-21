@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Map, Users, LogIn, LogOut, Wrench,
-  ClipboardList, Settings, Building2, Menu, X, ChevronRight,
+  ClipboardList, Settings, Building2, Menu, X, UserCircle,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.js';
 
@@ -60,13 +60,23 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* User + Logout */}
-      <div className="px-3 py-4 border-t border-gray-700">
-        <div className="px-3 py-2 mb-2">
-          <p className="text-xs text-gray-400">Sesión activa</p>
-          <p className="text-sm text-white font-medium truncate">{currentUser?.nombre}</p>
-          <p className="text-xs text-gray-400 capitalize">{currentUser?.rol}</p>
-        </div>
+      {/* User + Profile + Logout */}
+      <div className="px-3 py-4 border-t border-gray-700 space-y-1">
+        <NavLink
+          to="/perfil"
+          onClick={() => setMobileOpen(false)}
+          className={({ isActive }) =>
+            `sidebar-item ${isActive ? 'sidebar-item-active' : ''}`
+          }
+        >
+          <div className="w-7 h-7 rounded-full bg-yellow-500 flex items-center justify-center flex-shrink-0">
+            <span className="text-xs font-bold text-white">{currentUser?.nombre?.charAt(0)}</span>
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm text-white font-medium truncate leading-tight">{currentUser?.nombre}</p>
+            <p className="text-xs text-gray-400 capitalize leading-tight">DNI: {currentUser?.dni}</p>
+          </div>
+        </NavLink>
         <button
           onClick={handleLogout}
           className="sidebar-item w-full text-red-400 hover:text-red-300 hover:bg-red-900/20"

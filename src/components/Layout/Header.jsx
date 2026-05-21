@@ -13,6 +13,7 @@ const pageTitles = {
   '/mantenimiento': 'Tickets de Mantenimiento',
   '/auditoria': 'Log de Auditoría',
   '/configuracion': 'Configuración',
+  '/perfil': 'Mi Perfil',
 };
 
 export default function Header() {

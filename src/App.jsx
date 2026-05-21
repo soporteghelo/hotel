@@ -11,6 +11,7 @@ import CheckOut from './pages/CheckOut.jsx';
 import Maintenance from './pages/Maintenance.jsx';
 import AuditLog from './pages/AuditLog.jsx';
 import Settings from './pages/Settings.jsx';
+import Profile from './pages/Profile.jsx';
 
 export default function App() {
   const initializeData = useStore(s => s.initializeData);
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="mantenimiento" element={<Maintenance />} />
         <Route path="auditoria" element={<AuditLog />} />
         <Route path="configuracion" element={<Settings />} />
+        <Route path="perfil" element={<Profile />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

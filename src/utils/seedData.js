@@ -5,38 +5,39 @@ export function generateSeedData() {
   const today = new Date().toISOString().split('T')[0];
 
   // ========== USUARIOS ==========
+  // Contraseña inicial = DNI. El usuario puede cambiarla desde su perfil.
   const usuarios = [
     {
       id: 'u1',
-      email: 'admin@hotel.com',
-      nombre: 'Administrador Sistema',
+      dni: '11111111',
+      nombre: 'Administrador del Sistema',
       rol: 'admin',
       activo: true,
-      password: 'admin123',
+      password: '11111111',
     },
     {
       id: 'u2',
-      email: 'recepcion@hotel.com',
+      dni: '22222222',
       nombre: 'María González',
       rol: 'recepcionista',
       activo: true,
-      password: 'recep123',
+      password: '22222222',
     },
     {
       id: 'u3',
-      email: 'supervisor@hotel.com',
+      dni: '33333333',
       nombre: 'Carlos Rodríguez',
       rol: 'supervisor',
       activo: true,
-      password: 'super123',
+      password: '33333333',
     },
     {
       id: 'u4',
-      email: 'consulta@hotel.com',
+      dni: '44444444',
       nombre: 'Ana Martínez',
       rol: 'consulta',
       activo: true,
-      password: 'consulta123',
+      password: '44444444',
     },
   ];
 

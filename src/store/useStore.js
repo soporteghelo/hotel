@@ -35,25 +35,36 @@ const useStore = create(
       },
 
       // ========== AUTH ==========
-      login: (email, password) => {
+      login: (dni, password) => {
         const { usuarios } = get();
         const user = usuarios.find(
-          u => u.email === email && u.password === password && u.activo
+          u => u.dni === dni.trim() && u.password === password && u.activo
         );
         if (user) {
           set({ currentUser: user });
-          get().addLog('LOGIN', 'Usuario', user.id, null, { email: user.email });
+          get().addLog('LOGIN', 'Usuario', user.id, null, { dni: user.dni });
           return { success: true, user };
         }
-        return { success: false, error: 'Credenciales inválidas' };
+        return { success: false, error: 'DNI o contraseña incorrectos' };
       },
 
       logout: () => {
         const { currentUser } = get();
         if (currentUser) {
-          get().addLog('LOGOUT', 'Usuario', currentUser.id, null, { email: currentUser.email });
+          get().addLog('LOGOUT', 'Usuario', currentUser.id, null, { dni: currentUser.dni });
         }
         set({ currentUser: null });
+      },
+
+      // ========== PERFIL ==========
+      updatePerfil: (id, data) => {
+        const prev = get().usuarios.find(u => u.id === id);
+        const updated = { ...prev, ...data };
+        set(s => ({
+          usuarios: s.usuarios.map(u => u.id === id ? updated : u),
+          currentUser: s.currentUser?.id === id ? updated : s.currentUser,
+        }));
+        get().addLog('EDITAR_PERFIL', 'Usuario', id, { nombre: prev?.nombre }, { nombre: data.nombre });
       },
 
       // ========== AUDIT LOG ==========
@@ -307,7 +318,7 @@ const useStore = create(
     }),
     {
       name: 'mining-camp-storage',
-      version: 1,
+      version: 2, // bump forces re-seed with DNI-based auth
     }
   )
 );

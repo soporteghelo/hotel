@@ -10,7 +10,7 @@ import Modal from '../components/ui/Modal.jsx';
 import Input, { Select } from '../components/ui/Input.jsx';
 
 const EMPTY_HOTEL = { nombre: '', ubicacion: '', codigo: '', nPisos: 3, estado: 'activo' };
-const EMPTY_USER = { nombre: '', email: '', rol: 'recepcionista', password: '', activo: true };
+const EMPTY_USER = { nombre: '', dni: '', rol: 'recepcionista', password: '', activo: true };
 
 function HotelForm({ initial = EMPTY_HOTEL, onSave, onCancel, loading }) {
   const [form, setForm] = useState(initial);
@@ -50,20 +50,22 @@ function UserForm({ initial = EMPTY_USER, onSave, onCancel, loading, isEdit }) {
       <div className="grid grid-cols-2 gap-4">
         <Input label="Nombre completo" required value={form.nombre}
           onChange={e => set('nombre', e.target.value)} className="col-span-2"
-          placeholder="Juan Pérez" />
-        <Input label="Email" required type="email" value={form.email}
-          onChange={e => set('email', e.target.value)}
-          className="col-span-2" placeholder="usuario@hotel.com" />
+          placeholder="Juan Pérez González" />
+        <Input label="DNI / RUT" required value={form.dni}
+          onChange={e => set('dni', e.target.value)}
+          placeholder="12345678" hint="Será usado para iniciar sesión" />
         <Select label="Rol" required value={form.rol} onChange={e => set('rol', e.target.value)}>
           <option value="admin">Administrador</option>
           <option value="supervisor">Supervisor</option>
           <option value="recepcionista">Recepcionista</option>
           <option value="consulta">Consulta</option>
         </Select>
-        <Input label={isEdit ? 'Nueva contraseña (opcional)' : 'Contraseña'} type="password"
+        <Input label={isEdit ? 'Contraseña (opcional)' : 'Contraseña inicial'} type="password"
           required={!isEdit} value={form.password}
           onChange={e => set('password', e.target.value)}
-          placeholder={isEdit ? 'Dejar vacío para no cambiar' : '••••••••'} />
+          className="col-span-2"
+          placeholder={isEdit ? 'Dejar vacío para no cambiar' : 'Dejar vacío para usar el DNI como contraseña'}
+          hint={!isEdit ? 'Si se deja vacío, la contraseña inicial será el DNI' : ''} />
       </div>
       <div className="flex justify-end gap-3 pt-2">
         <Button variant="outline" onClick={onCancel} type="button">Cancelar</Button>
@@ -126,8 +128,10 @@ export default function Settings() {
       addToast('Usuario actualizado', 'success');
       setEditingUser(null);
     } else {
-      addUsuario(form);
-      addToast('Usuario creado', 'success');
+      // Default password = DNI if not specified
+      const withPass = { ...form, password: form.password || form.dni };
+      addUsuario(withPass);
+      addToast(`Usuario creado. Contraseña inicial: ${withPass.password}`, 'success');
       setShowUserForm(false);
     }
     setLoading(false);
@@ -209,7 +213,7 @@ export default function Settings() {
               <thead>
                 <tr className="border-b border-gray-100">
                   <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Nombre</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Email</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">DNI</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Rol</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Estado</th>
                   <th className="px-4 py-3"></th>
@@ -229,7 +233,7 @@ export default function Settings() {
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 hidden sm:table-cell">{u.email}</td>
+                    <td className="px-4 py-3 text-gray-500 hidden sm:table-cell font-mono text-xs">{u.dni}</td>
                     <td className="px-4 py-3"><Badge value={u.rol} /></td>
                     <td className="px-4 py-3">
                       <span className={`text-xs font-medium ${u.activo ? 'text-green-600' : 'text-gray-400'}`}>
